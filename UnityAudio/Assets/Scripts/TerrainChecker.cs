@@ -6,33 +6,33 @@ using UnityEngine;
 
 public class TerrainChecker : MonoBehaviour
 {
-    protected bool isWood = false;
-
-    private void Start()
-    {
-
-    }
+    [HideInInspector]
+    public string terrainType;
+    public bool isGrounded;
+    public Color rayColor = Color.green;
 
     private void Update()
     {
-        
-    }
-
-    public String GetCurrentFootstepSound()
-    {
         RaycastHit hit;
-        float raycastDistance = 0.2f; 
-
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.2f))
         {
             if (hit.collider.CompareTag("Wood"))
             {
-                isWood = true;
-                return "Wood";
+                terrainType = "Wood";
             }
+            else
+            {
+                terrainType = "Concrete";
+            }
+
+            isGrounded = true;
+        }
+        else
+        {
+            terrainType = "None";
+            isGrounded = false;
         }
 
-        isWood = false;
-        return "Untagged";
+        Debug.DrawRay(transform.position, Vector3.down * 1.0f, rayColor);
     }
 }
